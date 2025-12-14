@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math' as math;
-import '../../../config/constants.dart';
 import '../../auth/presentation/login_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -26,9 +25,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('hasSeenOnboarding', true);
     if (mounted) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
-      );
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
     }
   }
 
@@ -48,7 +47,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               _OnboardingPage4(),
             ],
           ),
-          
+
           // Skip button at top right
           Positioned(
             top: 16,
@@ -58,7 +57,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onPressed: _completeOnboarding,
                 style: TextButton.styleFrom(
                   backgroundColor: const Color(0xFF2D2D2D).withOpacity(0.1),
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -75,7 +77,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
           ),
-          
+
           // Bottom section with indicators and button
           SafeArea(
             child: Align(
@@ -95,17 +97,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           width: _currentPage == index ? 32 : 8,
                           height: 8,
                           decoration: BoxDecoration(
-                            color: _currentPage == index 
-                                ? const Color(0xFFFDB913)
-                                : const Color(0xFF757575).withOpacity(0.3),
+                            color:
+                                _currentPage == index
+                                    ? const Color(0xFFFDB913)
+                                    : const Color(0xFF757575).withOpacity(0.3),
                             borderRadius: BorderRadius.circular(4),
                           ),
                         );
                       }),
                     ),
-                    
+
                     const SizedBox(height: 32),
-                    
+
                     // Action button
                     SizedBox(
                       width: double.infinity,
@@ -157,96 +160,105 @@ class _WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFFF8F8F5),
-            Color(0xFFFFCC80),
-          ],
+          colors: [Color(0xFFF8F8F5), Color(0xFFFFCC80)],
         ),
       ),
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: Column(
-            children: [
-              const SizedBox(height: 80),
-              
-              // Main content
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Atomberg Logo
-                    Image.asset(
-                      'assets/images/logo.png',
-                      height: 140,
-                    )
-                    .animate()
-                    .fadeIn(duration: 800.ms)
-                    .scale(delay: 200.ms, duration: 600.ms, curve: Curves.easeOutBack),
-                    
-                    const SizedBox(height: 56),
-                    
-                    // Welcome text
-                    const Text(
-                      'Welcome to Atomberg!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF2D2D2D),
-                        height: 1.2,
-                        fontFamily: 'Outfit',
-                      ),
-                    )
-                    .animate()
-                    .fadeIn(delay: 600.ms)
-                    .slideY(begin: 0.3, end: 0, duration: 600.ms),
-                    
-                    const SizedBox(height: 24),
-                    
-                    // Brand message
-                    const Text(
-                      'From day one, we\'ve turned real customer problems into modern solutions through tech-first innovation, R&D, and design.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Color(0xFF757575),
-                        height: 1.6,
-                        fontFamily: 'Outfit',
-                      ),
-                    )
-                    .animate()
-                    .fadeIn(delay: 800.ms)
-                    .slideY(begin: 0.3, end: 0, duration: 600.ms),
-                    
-                    const SizedBox(height: 20),
-                    
-                    const Text(
-                      'The result—products trusted for their performance, durability, and convenience.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFFFDB913),
-                        height: 1.6,
-                        fontFamily: 'Outfit',
-                      ),
-                    )
-                    .animate()
-                    .fadeIn(delay: 1000.ms)
-                    .slideY(begin: 0.3, end: 0, duration: 600.ms),
-                  ],
-                ),
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: screenHeight - MediaQuery.of(context).padding.vertical),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Column(
+                children: [
+                  SizedBox(height: screenHeight * 0.06),
+
+                  // Main content
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Atomberg Logo - responsive size
+                      Image.asset(
+                        'assets/images/logo.png',
+                        height: screenHeight * 0.12,
+                        width: screenWidth * 0.4,
+                        fit: BoxFit.contain,
+                      )
+                          .animate()
+                          .fadeIn(duration: 800.ms)
+                          .scale(
+                            delay: 200.ms,
+                            duration: 600.ms,
+                            curve: Curves.easeOutBack,
+                          ),
+
+                      SizedBox(height: screenHeight * 0.04),
+
+                      // Welcome text - responsive font size
+                      Text(
+                            'Welcome to Atomberg!',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.08,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF2D2D2D),
+                              height: 1.2,
+                              fontFamily: 'Outfit',
+                            ),
+                          )
+                          .animate()
+                          .fadeIn(delay: 600.ms)
+                          .slideY(begin: 0.3, end: 0, duration: 600.ms),
+
+                      SizedBox(height: screenHeight * 0.02),
+
+                      // Brand message
+                      Text(
+                            'From day one, we\'ve turned real customer problems into modern solutions through tech-first innovation, R&D, and design.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.04,
+                              color: const Color(0xFF757575),
+                              height: 1.6,
+                              fontFamily: 'Outfit',
+                            ),
+                          )
+                          .animate()
+                          .fadeIn(delay: 800.ms)
+                          .slideY(begin: 0.3, end: 0, duration: 600.ms),
+
+                      SizedBox(height: screenHeight * 0.015),
+
+                      Text(
+                            'The result—products trusted for their performance, durability, and convenience.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.04,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFFFDB913),
+                              height: 1.6,
+                              fontFamily: 'Outfit',
+                            ),
+                          )
+                          .animate()
+                          .fadeIn(delay: 1000.ms)
+                          .slideY(begin: 0.3, end: 0, duration: 600.ms),
+                    ],
+                  ),
+
+                  // Bottom spacing
+                  SizedBox(height: screenHeight * 0.1),
+                ],
               ),
-              
-              // Bottom spacing
-              const SizedBox(height: 140),
-            ],
+            ),
           ),
         ),
       ),
@@ -262,7 +274,8 @@ class _OnboardingPage1 extends StatefulWidget {
   State<_OnboardingPage1> createState() => _OnboardingPage1State();
 }
 
-class _OnboardingPage1State extends State<_OnboardingPage1> with SingleTickerProviderStateMixin {
+class _OnboardingPage1State extends State<_OnboardingPage1>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<int> _savingsAnimation;
   late Animation<int> _percentAnimation;
@@ -274,12 +287,14 @@ class _OnboardingPage1State extends State<_OnboardingPage1> with SingleTickerPro
       duration: const Duration(milliseconds: 2500),
       vsync: this,
     );
-    _savingsAnimation = IntTween(begin: 0, end: 3500).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
-    _percentAnimation = IntTween(begin: 0, end: 65).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
+    _savingsAnimation = IntTween(
+      begin: 0,
+      end: 3500,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+    _percentAnimation = IntTween(
+      begin: 0,
+      end: 65,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
     Future.delayed(const Duration(milliseconds: 300), () {
       if (mounted) _controller.forward();
     });
@@ -293,15 +308,15 @@ class _OnboardingPage1State extends State<_OnboardingPage1> with SingleTickerPro
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFFF8F8F5),
-            Color(0xFFFFCC80),
-          ],
+          colors: [Color(0xFFF8F8F5), Color(0xFFFFCC80)],
         ),
       ),
       child: Stack(
@@ -331,70 +346,82 @@ class _OnboardingPage1State extends State<_OnboardingPage1> with SingleTickerPro
               ),
             ),
           ),
-          
+
           SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: Column(
-                children: [
-                  const SizedBox(height: 60),
-                  
-                  // Main visual
-                  Expanded(
-                    child: Center(
-                      child: Column(
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: screenHeight - MediaQuery.of(context).padding.vertical),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Column(
+                    children: [
+                      SizedBox(height: screenHeight * 0.05),
+
+                      // Main visual
+                      Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           // Lightning bolt in circle
                           Container(
-                            width: 160,
-                            height: 160,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFDB913).withOpacity(0.15),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Container(
-                                  width: 120,
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFDB913).withOpacity(0.25),
-                                    shape: BoxShape.circle,
-                                  ),
+                                width: screenWidth * 0.4,
+                                height: screenWidth * 0.4,
+                                decoration: BoxDecoration(
+                                  color: const Color(
+                                    0xFFFDB913,
+                                  ).withOpacity(0.15),
+                                  shape: BoxShape.circle,
                                 ),
-                                const Icon(
-                                  Icons.bolt,
-                                  size: 80,
-                                  color: Color(0xFFFDB913),
-                                )
-                                .animate(onPlay: (controller) => controller.repeat(reverse: true))
-                                .scale(
-                                  begin: const Offset(0.9, 0.9),
-                                  end: const Offset(1.0, 1.0),
-                                  duration: const Duration(milliseconds: 1500),
-                                  curve: Curves.easeInOut,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Container(
+                                      width: screenWidth * 0.3,
+                                      height: screenWidth * 0.3,
+                                      decoration: BoxDecoration(
+                                        color: const Color(
+                                          0xFFFDB913,
+                                        ).withOpacity(0.25),
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                    Icon(
+                                          Icons.bolt,
+                                          size: screenWidth * 0.2,
+                                          color: const Color(0xFFFDB913),
+                                        )
+                                        .animate(
+                                          onPlay:
+                                              (controller) => controller.repeat(
+                                                reverse: true,
+                                              ),
+                                        )
+                                        .scale(
+                                          begin: const Offset(0.9, 0.9),
+                                          end: const Offset(1.0, 1.0),
+                                          duration: const Duration(
+                                            milliseconds: 1500,
+                                          ),
+                                          curve: Curves.easeInOut,
+                                        ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          )
-                          .animate()
-                          .fadeIn(duration: 600.ms)
-                          .scale(delay: 200.ms, duration: 600.ms),
-                          
-                          const SizedBox(height: 56),
-                          
+                              )
+                              .animate()
+                              .fadeIn(duration: 600.ms)
+                              .scale(delay: 200.ms, duration: 600.ms),
+
+                          SizedBox(height: screenHeight * 0.04),
+
                           // Savings counter
                           AnimatedBuilder(
                             animation: _savingsAnimation,
                             builder: (context, child) {
                               return Text(
                                 '₹${_savingsAnimation.value}',
-                                style: const TextStyle(
-                                  fontSize: 72,
+                                style: TextStyle(
+                                  fontSize: screenWidth * 0.15,
                                   fontWeight: FontWeight.bold,
-                                  color: Color(0xFFFDB913),
+                                  color: const Color(0xFFFDB913),
                                   height: 1,
                                   letterSpacing: -2,
                                   fontFamily: 'Outfit',
@@ -402,110 +429,114 @@ class _OnboardingPage1State extends State<_OnboardingPage1> with SingleTickerPro
                               );
                             },
                           ),
-                          
-                          const SizedBox(height: 12),
-                          
-                          const Text(
+
+                          SizedBox(height: screenHeight * 0.015),
+
+                          Text(
                             'Average Yearly Savings',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: screenWidth * 0.04,
                               fontWeight: FontWeight.w600,
-                              color: Color(0xFF757575),
+                              color: const Color(0xFF757575),
                               fontFamily: 'Outfit',
                             ),
-                          )
-                          .animate()
-                          .fadeIn(delay: 800.ms),
-                          
-                          const SizedBox(height: 32),
-                          
+                          ).animate().fadeIn(delay: 800.ms),
+
+                          SizedBox(height: screenHeight * 0.03),
+
                           // Efficiency badge
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(24),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color(0xFFFDB913).withOpacity(0.2),
-                                  blurRadius: 12,
-                                  spreadRadius: 2,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                  vertical: 12,
                                 ),
-                              ],
-                            ),
-                            child: AnimatedBuilder(
-                              animation: _percentAnimation,
-                              builder: (context, child) {
-                                return Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(
-                                      Icons.eco,
-                                      color: Color(0xFFFDB913),
-                                      size: 20,
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      '${_percentAnimation.value}% More Efficient',
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF2D2D2D),
-                                        fontFamily: 'Outfit',
-                                      ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(24),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: const Color(
+                                        0xFFFDB913,
+                                      ).withOpacity(0.2),
+                                      blurRadius: 12,
+                                      spreadRadius: 2,
                                     ),
                                   ],
-                                );
-                              },
-                            ),
-                          )
-                          .animate()
-                          .fadeIn(delay: 1000.ms)
-                          .slideY(begin: 0.3, end: 0, duration: 600.ms),
+                                ),
+                                child: AnimatedBuilder(
+                                  animation: _percentAnimation,
+                                  builder: (context, child) {
+                                    return Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(
+                                          Icons.eco,
+                                          color: Color(0xFFFDB913),
+                                          size: 20,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          '${_percentAnimation.value}% More Efficient',
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFF2D2D2D),
+                                            fontFamily: 'Outfit',
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              )
+                              .animate()
+                              .fadeIn(delay: 1000.ms)
+                              .slideY(begin: 0.3, end: 0, duration: 600.ms),
                         ],
                       ),
-                    ),
+
+                      SizedBox(height: screenHeight * 0.05),
+
+                      // Bottom text content
+                      Column(
+                        children: [
+                          Text(
+                                'Cut Your Electricity Bills',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: screenWidth * 0.07,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF2D2D2D),
+                                  height: 1.2,
+                                  fontFamily: 'Outfit',
+                                ),
+                              )
+                              .animate()
+                              .fadeIn(delay: 400.ms)
+                              .slideY(begin: 0.3, end: 0, duration: 600.ms),
+
+                          SizedBox(height: screenHeight * 0.015),
+
+                          Text(
+                                'BLDC motors that consume 65% less power\nthan traditional fans',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: screenWidth * 0.04,
+                                  color: const Color(0xFF757575),
+                                  height: 1.5,
+                                  fontFamily: 'Outfit',
+                                ),
+                              )
+                              .animate()
+                              .fadeIn(delay: 600.ms)
+                              .slideY(begin: 0.3, end: 0, duration: 600.ms),
+
+                          SizedBox(height: screenHeight * 0.1),
+                        ],
+                      ),
+                    ],
                   ),
-                  
-                  // Bottom text content
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 140),
-                    child: Column(
-                      children: [
-                        const Text(
-                          'Cut Your Electricity Bills',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF2D2D2D),
-                            height: 1.2,
-                            fontFamily: 'Outfit',
-                          ),
-                        )
-                        .animate()
-                        .fadeIn(delay: 400.ms)
-                        .slideY(begin: 0.3, end: 0, duration: 600.ms),
-                        
-                        const SizedBox(height: 16),
-                        
-                        const Text(
-                          'BLDC motors that consume 65% less power\nthan traditional fans',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xFF757575),
-                            height: 1.5,
-                            fontFamily: 'Outfit',
-                          ),
-                        )
-                        .animate()
-                        .fadeIn(delay: 600.ms)
-                        .slideY(begin: 0.3, end: 0, duration: 600.ms),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
@@ -521,15 +552,15 @@ class _OnboardingPage2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFFFFCC80),
-            Color(0xFFFDB913),
-          ],
+          colors: [Color(0xFFFFCC80), Color(0xFFFDB913)],
         ),
       ),
       child: Stack(
@@ -539,42 +570,47 @@ class _OnboardingPage2 extends StatelessWidget {
             top: 100,
             left: 30,
             child: Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.2),
-              ),
-            )
-            .animate(onPlay: (controller) => controller.repeat(reverse: true))
-            .scale(duration: 2000.ms),
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withOpacity(0.2),
+                  ),
+                )
+                .animate(
+                  onPlay: (controller) => controller.repeat(reverse: true),
+                )
+                .scale(duration: 2000.ms),
           ),
           Positioned(
             bottom: 200,
             right: 40,
             child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.15),
-              ),
-            )
-            .animate(onPlay: (controller) => controller.repeat(reverse: true))
-            .scale(duration: 2500.ms),
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withOpacity(0.15),
+                  ),
+                )
+                .animate(
+                  onPlay: (controller) => controller.repeat(reverse: true),
+                )
+                .scale(duration: 2500.ms),
           ),
-          
+
           SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: Column(
-                children: [
-                  const SizedBox(height: 60),
-                  
-                  // Main visual
-                  Expanded(
-                    child: Center(
-                      child: Column(
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: screenHeight - MediaQuery.of(context).padding.vertical),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Column(
+                    children: [
+                      SizedBox(height: screenHeight * 0.05),
+
+                      // Main visual
+                      Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           // Phone with connection rings
@@ -584,63 +620,83 @@ class _OnboardingPage2 extends StatelessWidget {
                               // Pulse rings
                               ...List.generate(3, (index) {
                                 return Container(
-                                  width: 200 + (index * 40.0),
-                                  height: 200 + (index * 40.0),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: Colors.white.withOpacity(0.4),
-                                      width: 2,
-                                    ),
-                                  ),
-                                )
-                                .animate(onPlay: (controller) => controller.repeat())
-                                .fadeOut(
-                                  delay: Duration(milliseconds: index * 600),
-                                  duration: const Duration(milliseconds: 1800),
-                                )
-                                .scale(
-                                  begin: const Offset(0.8, 0.8),
-                                  end: const Offset(1.2, 1.2),
-                                  delay: Duration(milliseconds: index * 600),
-                                  duration: const Duration(milliseconds: 1800),
-                                );
+                                      width: 200 + (index * 40.0),
+                                      height: 200 + (index * 40.0),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: Colors.white.withOpacity(0.4),
+                                          width: 2,
+                                        ),
+                                      ),
+                                    )
+                                    .animate(
+                                      onPlay:
+                                          (controller) => controller.repeat(),
+                                    )
+                                    .fadeOut(
+                                      delay: Duration(
+                                        milliseconds: index * 600,
+                                      ),
+                                      duration: const Duration(
+                                        milliseconds: 1800,
+                                      ),
+                                    )
+                                    .scale(
+                                      begin: const Offset(0.8, 0.8),
+                                      end: const Offset(1.2, 1.2),
+                                      delay: Duration(
+                                        milliseconds: index * 600,
+                                      ),
+                                      duration: const Duration(
+                                        milliseconds: 1800,
+                                      ),
+                                    );
                               }),
-                              
+
                               // Phone container
                               Container(
-                                width: 180,
-                                height: 180,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(90),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.15),
-                                      blurRadius: 30,
-                                      spreadRadius: 5,
+                                    width: screenWidth * 0.45,
+                                    height: screenWidth * 0.45,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(screenWidth * 0.225),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.15),
+                                          blurRadius: 30,
+                                          spreadRadius: 5,
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                child: const Icon(
-                                  Icons.smartphone_rounded,
-                                  size: 100,
-                                  color: Color(0xFF2D2D2D),
-                                )
-                                .animate(onPlay: (controller) => controller.repeat(reverse: true))
-                                .shimmer(
-                                  duration: const Duration(milliseconds: 2000),
-                                  color: const Color(0xFFFDB913).withOpacity(0.3),
-                                ),
-                              )
-                              .animate()
-                              .fadeIn(duration: 600.ms)
-                              .scale(delay: 200.ms, duration: 600.ms),
+                                    child: Icon(
+                                          Icons.smartphone_rounded,
+                                          size: screenWidth * 0.25,
+                                          color: const Color(0xFF2D2D2D),
+                                        )
+                                        .animate(
+                                          onPlay:
+                                              (controller) => controller.repeat(
+                                                reverse: true,
+                                              ),
+                                        )
+                                        .shimmer(
+                                          duration: const Duration(
+                                            milliseconds: 2000,
+                                          ),
+                                          color: const Color(
+                                            0xFFFDB913,
+                                          ).withOpacity(0.3),
+                                        ),
+                                  )
+                                  .animate()
+                                  .fadeIn(duration: 600.ms)
+                                  .scale(delay: 200.ms, duration: 600.ms),
                             ],
                           ),
-                          
-                          const SizedBox(height: 56),
-                          
+
+                          SizedBox(height: screenHeight * 0.04),
+
                           // Feature pills
                           Wrap(
                             alignment: WrapAlignment.center,
@@ -671,48 +727,49 @@ class _OnboardingPage2 extends StatelessWidget {
                           ),
                         ],
                       ),
-                    ),
+
+                      SizedBox(height: screenHeight * 0.05),
+
+                      // Bottom text content
+                      Column(
+                        children: [
+                          Text(
+                                'Control From Anywhere',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: screenWidth * 0.07,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF2D2D2D),
+                                  height: 1.2,
+                                  fontFamily: 'Outfit',
+                                ),
+                              )
+                              .animate()
+                              .fadeIn(delay: 400.ms)
+                              .slideY(begin: 0.3, end: 0, duration: 600.ms),
+
+                          SizedBox(height: screenHeight * 0.015),
+
+                          Text(
+                                'Seamless IoT connectivity with timers,\nschedules, and voice commands',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: screenWidth * 0.04,
+                                  color: const Color(0xFF2D2D2D),
+                                  height: 1.5,
+                                  fontFamily: 'Outfit',
+                                ),
+                              )
+                              .animate()
+                              .fadeIn(delay: 600.ms)
+                              .slideY(begin: 0.3, end: 0, duration: 600.ms),
+
+                          SizedBox(height: screenHeight * 0.1),
+                        ],
+                      ),
+                    ],
                   ),
-                  
-                  // Bottom text content
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 140),
-                    child: Column(
-                      children: [
-                        const Text(
-                          'Control From Anywhere',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF2D2D2D),
-                            height: 1.2,
-                            fontFamily: 'Outfit',
-                          ),
-                        )
-                        .animate()
-                        .fadeIn(delay: 400.ms)
-                        .slideY(begin: 0.3, end: 0, duration: 600.ms),
-                        
-                        const SizedBox(height: 16),
-                        
-                        const Text(
-                          'Seamless IoT connectivity with timers,\nschedules, and voice commands',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xFF2D2D2D),
-                            height: 1.5,
-                            fontFamily: 'Outfit',
-                          ),
-                        )
-                        .animate()
-                        .fadeIn(delay: 600.ms)
-                        .slideY(begin: 0.3, end: 0, duration: 600.ms),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
@@ -728,143 +785,146 @@ class _OnboardingPage3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFFF8F8F5),
-            Color(0xFFFFCC80),
-          ],
+          colors: [Color(0xFFF8F8F5), Color(0xFFFFCC80)],
         ),
       ),
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: Column(
-            children: [
-              const SizedBox(height: 60),
-              
-              // Main content
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // India map
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Colors.white.withOpacity(0.15),
-                            Colors.white.withOpacity(0.05),
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: screenHeight - MediaQuery.of(context).padding.vertical),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Column(
+                children: [
+                  SizedBox(height: screenHeight * 0.05),
+
+                  // Main content
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // India map
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Colors.white.withOpacity(0.15),
+                              Colors.white.withOpacity(0.05),
+                            ],
+                          ),
+                          border: Border.all(
+                            color: const Color(0xFFFDB913).withOpacity(0.15),
+                            width: 1.5,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFFFDB913).withOpacity(0.08),
+                              blurRadius: 20,
+                              spreadRadius: 3,
+                            ),
                           ],
                         ),
-                        border: Border.all(
-                          color: const Color(0xFFFDB913).withOpacity(0.15),
-                          width: 1.5,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFFFDB913).withOpacity(0.08),
-                            blurRadius: 20,
-                            spreadRadius: 3,
-                          ),
-                        ],
+                        child: Image.asset(
+                              'assets/images/india.png',
+                              height: screenHeight * 0.3,
+                              fit: BoxFit.contain,
+                            )
+                            .animate()
+                            .fadeIn(duration: 800.ms)
+                            .scale(delay: 200.ms, duration: 600.ms),
                       ),
-                      child: Image.asset(
-                        'assets/images/india.png',
-                        height: 300,
-                        fit: BoxFit.contain,
-                      )
-                      .animate()
-                      .fadeIn(duration: 800.ms)
-                      .scale(delay: 200.ms, duration: 600.ms),
-                    ),
-                    
-                    const SizedBox(height: 32),
-                    
+
+                      SizedBox(height: screenHeight * 0.03),
+
                     // 3 metrics in a single row
                     Row(
-                      children: const [
-                        Expanded(
-                          child: _StatItem(
-                            value: '3000+',
-                            label: 'Daily Services',
-                            delay: 600,
+                          children: const [
+                            Expanded(
+                              child: _StatItem(
+                                value: '3000+',
+                                label: 'Daily Services',
+                                delay: 600,
+                              ),
+                            ),
+                            SizedBox(width: 20),
+                            Expanded(
+                              child: _StatItem(
+                                value: '99%',
+                                label: 'Pincodes',
+                                delay: 800,
+                              ),
+                            ),
+                            SizedBox(width: 20),
+                            Expanded(
+                              child: _StatItem(
+                                value: '4.6★',
+                                label: 'Rating',
+                                delay: 1000,
+                              ),
+                            ),
+                          ],
+                        )
+                        .animate()
+                        .fadeIn(delay: 400.ms)
+                        .slideY(begin: 0.3, end: 0, duration: 600.ms),
+
+                      SizedBox(height: screenHeight * 0.05),
+
+                      // Bottom text content
+                      Column(
+                        children: [
+                          Text(
+                            'Service Across India',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.065,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF2D2D2D),
+                              height: 1.2,
+                              fontFamily: 'Outfit',
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 20),
-                        Expanded(
-                          child: _StatItem(
-                            value: '99%',
-                            label: 'Pincodes',
-                            delay: 800,
+
+                          SizedBox(height: screenHeight * 0.015),
+
+                          Text(
+                            'Pan-India network with on-site warranty\nand doorstep service',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.038,
+                              color: const Color(0xFF757575),
+                              height: 1.5,
+                              fontFamily: 'Outfit',
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 20),
-                        Expanded(
-                          child: _StatItem(
-                            value: '4.6★',
-                            label: 'Rating',
-                            delay: 1000,
-                          ),
-                        ),
-                      ],
-                    )
-                    .animate()
-                    .fadeIn(delay: 400.ms)
-                    .slideY(begin: 0.3, end: 0, duration: 600.ms),
-                  ],
-                ),
+
+                          SizedBox(height: screenHeight * 0.1),
+                        ],
+                      )
+                      .animate()
+                      .fadeIn(delay: 400.ms)
+                      .slideY(begin: 0.3, end: 0, duration: 600.ms),
+                    ],
+                  ),
+                ],
               ),
-              
-              // Bottom text content
-              const Padding(
-                padding: EdgeInsets.only(bottom: 140, top: 10),
-                child: Column(
-                  children: [
-                    Text(
-                      'Service Across India',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF2D2D2D),
-                        height: 1.2,
-                        fontFamily: 'Outfit',
-                      ),
-                    ),
-                    
-                    SizedBox(height: 12),
-                    
-                    Text(
-                      'Pan-India network with on-site warranty\nand doorstep service',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xFF757575),
-                        height: 1.5,
-                        fontFamily: 'Outfit',
-                      ),
-                    ),
-                  ],
-                ),
-              )
-              .animate()
-              .fadeIn(delay: 400.ms)
-              .slideY(begin: 0.3, end: 0, duration: 600.ms),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
-
 }
 
 // Page 4: Trust & Quality
@@ -873,28 +933,29 @@ class _OnboardingPage4 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFFFFCC80),
-            Color(0xFFFDB913),
-          ],
+          colors: [Color(0xFFFFCC80), Color(0xFFFDB913)],
         ),
       ),
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: Column(
-            children: [
-              const SizedBox(height: 60),
-              
-              // Main visual
-              Expanded(
-                child: Center(
-                  child: Column(
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: screenHeight - MediaQuery.of(context).padding.vertical),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Column(
+                children: [
+                  SizedBox(height: screenHeight * 0.05),
+
+                  // Main visual
+                  Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       // Badge with stars
@@ -909,73 +970,79 @@ class _OnboardingPage4 extends StatelessWidget {
                               left: 80 + radius * math.cos(angle),
                               top: 80 + radius * math.sin(angle),
                               child: Icon(
-                                Icons.star,
-                                size: index % 2 == 0 ? 20 : 14,
-                                color: Colors.white.withOpacity(0.8),
-                              )
-                              .animate(onPlay: (controller) => controller.repeat())
-                              .fadeIn(
-                                delay: Duration(milliseconds: index * 150),
-                                duration: const Duration(milliseconds: 800),
-                              )
-                              .fadeOut(
-                                delay: Duration(milliseconds: 800 + index * 150),
-                                duration: const Duration(milliseconds: 800),
-                              )
-                              .rotate(
-                                begin: 0,
-                                end: 1,
-                                duration: const Duration(milliseconds: 4000),
-                              ),
-                            );
-                          }),
-                          
-                          // Main badge
-                          Container(
-                            width: 160,
-                            height: 160,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.15),
-                                  blurRadius: 30,
-                                  spreadRadius: 5,
-                                ),
-                              ],
-                            ),
-                            child: const Center(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.verified,
-                                    size: 60,
-                                    color: Color(0xFFFDB913),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    '#1 in India',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF2D2D2D),
-                                      fontFamily: 'Outfit',
+                                    Icons.star,
+                                    size: index % 2 == 0 ? 20 : 14,
+                                    color: Colors.white.withOpacity(0.8),
+                                  )
+                                  .animate(
+                                    onPlay: (controller) => controller.repeat(),
+                                  )
+                                  .fadeIn(
+                                    delay: Duration(milliseconds: index * 150),
+                                    duration: const Duration(milliseconds: 800),
+                                  )
+                                  .fadeOut(
+                                    delay: Duration(
+                                      milliseconds: 800 + index * 150,
+                                    ),
+                                    duration: const Duration(milliseconds: 800),
+                                  )
+                                  .rotate(
+                                    begin: 0,
+                                    end: 1,
+                                    duration: const Duration(
+                                      milliseconds: 4000,
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          )
-                          .animate()
-                          .fadeIn(duration: 600.ms)
-                          .scale(delay: 200.ms, duration: 600.ms),
+                            );
+                          }),
+
+                          // Main badge
+                          Container(
+                                width: screenWidth * 0.4,
+                                height: screenWidth * 0.4,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.15),
+                                      blurRadius: 30,
+                                      spreadRadius: 5,
+                                    ),
+                                  ],
+                                ),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.verified,
+                                        size: screenWidth * 0.15,
+                                        color: const Color(0xFFFDB913),
+                                      ),
+                                      SizedBox(height: screenHeight * 0.005),
+                                      Text(
+                                        '#1 in India',
+                                        style: TextStyle(
+                                          fontSize: screenWidth * 0.04,
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0xFF2D2D2D),
+                                          fontFamily: 'Outfit',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                              .animate()
+                              .fadeIn(duration: 600.ms)
+                              .scale(delay: 200.ms, duration: 600.ms),
                         ],
                       ),
-                      
-                      const SizedBox(height: 56),
-                      
+
+                      SizedBox(height: screenHeight * 0.04),
+
                       // Trust badges
                       Wrap(
                         alignment: WrapAlignment.center,
@@ -1004,48 +1071,49 @@ class _OnboardingPage4 extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
+
+                  SizedBox(height: screenHeight * 0.05),
+
+                  // Bottom text content
+                  Column(
+                    children: [
+                      Text(
+                            'Trusted by Millions',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.07,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF2D2D2D),
+                              height: 1.2,
+                              fontFamily: 'Outfit',
+                            ),
+                          )
+                          .animate()
+                          .fadeIn(delay: 400.ms)
+                          .slideY(begin: 0.3, end: 0, duration: 600.ms),
+
+                      SizedBox(height: screenHeight * 0.015),
+
+                      Text(
+                            'Join India\'s largest community of\nsmart home enthusiasts',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.04,
+                              color: const Color(0xFF2D2D2D),
+                              height: 1.5,
+                              fontFamily: 'Outfit',
+                            ),
+                          )
+                          .animate()
+                          .fadeIn(delay: 600.ms)
+                          .slideY(begin: 0.3, end: 0, duration: 600.ms),
+
+                      SizedBox(height: screenHeight * 0.1),
+                    ],
+                  ),
+                ],
               ),
-              
-              // Bottom text content
-              Padding(
-                padding: const EdgeInsets.only(bottom: 140),
-                child: Column(
-                  children: [
-                    const Text(
-                      'Trusted by Millions',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF2D2D2D),
-                        height: 1.2,
-                        fontFamily: 'Outfit',
-                      ),
-                    )
-                    .animate()
-                    .fadeIn(delay: 400.ms)
-                    .slideY(begin: 0.3, end: 0, duration: 600.ms),
-                    
-                    const SizedBox(height: 16),
-                    
-                    const Text(
-                      'Join India\'s largest community of\nsmart home enthusiasts',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Color(0xFF2D2D2D),
-                        height: 1.5,
-                        fontFamily: 'Outfit',
-                      ),
-                    )
-                    .animate()
-                    .fadeIn(delay: 600.ms)
-                    .slideY(begin: 0.3, end: 0, duration: 600.ms),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -1068,32 +1136,35 @@ class _FeaturePill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.25),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.4), width: 1.5),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 18, color: const Color(0xFF2D2D2D)),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: const TextStyle(
-              color: Color(0xFF2D2D2D),
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Outfit',
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.25),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.4),
+              width: 1.5,
             ),
           ),
-        ],
-      ),
-    )
-    .animate()
-    .fadeIn(delay: Duration(milliseconds: delay))
-    .slideY(begin: 0.3, end: 0, duration: 600.ms);
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 18, color: const Color(0xFF2D2D2D)),
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: const TextStyle(
+                  color: Color(0xFF2D2D2D),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Outfit',
+                ),
+              ),
+            ],
+          ),
+        )
+        .animate()
+        .fadeIn(delay: Duration(milliseconds: delay))
+        .slideY(begin: 0.3, end: 0, duration: 600.ms);
   }
 }
 
@@ -1113,31 +1184,31 @@ class _StatItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFFFDB913),
-            fontFamily: 'Outfit',
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 12,
-            color: Color(0xFF757575),
-            fontFamily: 'Outfit',
-          ),
-        ),
-      ],
-    )
-    .animate()
-    .fadeIn(delay: Duration(milliseconds: delay))
-    .slideY(begin: 0.2, end: 0, duration: 600.ms);
+          children: [
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFFDB913),
+                fontFamily: 'Outfit',
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 12,
+                color: Color(0xFF757575),
+                fontFamily: 'Outfit',
+              ),
+            ),
+          ],
+        )
+        .animate()
+        .fadeIn(delay: Duration(milliseconds: delay))
+        .slideY(begin: 0.2, end: 0, duration: 600.ms);
   }
 }
 
@@ -1157,41 +1228,47 @@ class _TrustBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.25),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.4), width: 1.5),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, size: 32, color: const Color(0xFF2D2D2D)),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF2D2D2D),
-              fontFamily: 'Outfit',
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.25),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.4),
+              width: 1.5,
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Color(0xFF2D2D2D),
-              fontFamily: 'Outfit',
-            ),
+          child: Column(
+            children: [
+              Icon(icon, size: 32, color: const Color(0xFF2D2D2D)),
+              const SizedBox(height: 8),
+              Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF2D2D2D),
+                  fontFamily: 'Outfit',
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Color(0xFF2D2D2D),
+                  fontFamily: 'Outfit',
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    )
-    .animate()
-    .fadeIn(delay: Duration(milliseconds: delay))
-    .scale(begin: const Offset(0.8, 0.8), delay: Duration(milliseconds: delay), duration: 600.ms);
+        )
+        .animate()
+        .fadeIn(delay: Duration(milliseconds: delay))
+        .scale(
+          begin: const Offset(0.8, 0.8),
+          delay: Duration(milliseconds: delay),
+          duration: 600.ms,
+        );
   }
 }
-
