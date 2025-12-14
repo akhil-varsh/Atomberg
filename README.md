@@ -154,7 +154,7 @@ User Action → UI Component → Provider → Hybrid API Service
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/atomberg.git
+git clone https://github.com/akhil-varsh/Atomberg.git
 cd atomberg
 
 # Install dependencies
@@ -197,108 +197,7 @@ flutter build apk --release
 
 ### 🔐 Permissions
 - **permission_handler** 11.4.0 - Runtime permission management
-
 ---
-
-## 🎯 Features in Detail
-
-### 1️⃣ Local UDP Discovery
-
-The app listens for UDP beacons on **port 5625**:
-
-```dart
-// Beacon Packet Format
-[12-byte MAC Address][Series String]
-Example: "AABBCCDDEEFF" + "Gorilla"
-```
-
-- **Beacon Frequency**: 1 packet/second
-- **Timeout**: 3 seconds without beacon = device offline
-- **Auto-cleanup**: Removes inactive devices from registry
-
-### 2️⃣ Hybrid API Routing
-
-Smart routing algorithm:
-
-```dart
-Future<void> sendCommand(String deviceId, Map command) async {
-  // 1. Try local UDP first
-  final deviceIp = udpService.getDeviceIp(deviceId);
-  if (deviceIp != null) {
-    final success = await udpService.sendCommand(deviceIp, command);
-    if (success) return; // Done! (~50ms)
-  }
-  
-  // 2. Fallback to cloud API
-  await cloudApi.sendCommand(deviceId, command); // (~500ms)
-}
-```
-
-### 3️⃣ Real-time Status Indicators
-
-- 🟢 **Green "Local" Badge**: Device available via UDP
-- ⚪ **No Badge**: Using cloud API only
-- 🔴 **Offline Badge**: Device unreachable
-- ⏳ **Last Seen**: Timestamp of last communication
-
-### 4️⃣ Device Controls
-
-| Control | Icon | Description |
-|---------|------|-------------|
-| Power | 🔌 | On/Off toggle |
-| Speed | 🎚️ | 5 levels (1-5) |
-| Timer | ⏰ | Auto-off (0-8 hours) |
-| Sleep | 😴 | Gradual speed reduction |
-| LED | 💡 | Light on/off |
-| Brightness | ☀️ | LED intensity (0-100%) |
-| Color | 🎨 | RGB color picker |
-
----
-
-## 📡 API Documentation
-
-### Authentication
-
-```dart
-// Login
-POST https://api.developer.atomberg-iot.com/auth/login
-Headers: {
-  'api-key': 'your_api_key',
-  'refresh-token': 'your_refresh_token'
-}
-Response: { "access_token": "...", "expires_in": 3600 }
-```
-
-### Get Devices
-
-```dart
-GET https://api.developer.atomberg-iot.com/devices
-Headers: {
-  'Authorization': 'Bearer {access_token}'
-}
-Response: [
-  {
-    "device_id": "ABC123",
-    "name": "Living Room Fan",
-    "series": "Gorilla",
-    "mac": "AABBCCDDEEFF",
-    ...
-  }
-]
-```
-
-### Send Command
-
-```dart
-POST https://api.developer.atomberg-iot.com/devices/{device_id}/command
-Headers: {
-  'Authorization': 'Bearer {access_token}'
-}
-Body: {
-  "power": true,
-  "speed": 3
-}
-```
 
 ---
 
@@ -391,30 +290,7 @@ lib/
 
 ---
 
-## 🔐 Permissions
 
-### Android (AndroidManifest.xml)
-
-```xml
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-<uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
-<uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" />
-```
-
-### iOS (Info.plist)
-
-```xml
-<key>NSLocalNetworkUsageDescription</key>
-<string>Atomberg needs access to your local network to discover and control your smart fans directly.</string>
-<key>NSBonjourServices</key>
-<array>
-  <string>_atomberg._udp</string>
-</array>
-```
-
----
 
 ## 🐛 Troubleshooting
 
@@ -454,19 +330,7 @@ Contributions are welcome! Please follow these steps:
 
 ---
 
-## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 👨‍💻 Author
-
-**Your Name**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- Email: your.email@example.com
-
----
 
 ## 🙏 Acknowledgments
 
@@ -476,14 +340,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 📚 Documentation
 
-- [Setup Instructions](SETUP_INSTRUCTIONS.txt) - End user guide
-- [Assignment Report](ASSIGNMENT_REPORT.txt) - Detailed technical report
-- [Local UDP Control](LOCAL_UDP_CONTROL.md) - UDP implementation details
-- [API Schema](ATOMBERG_API_SCHEMA.md) - Complete API reference
-
----
 
 <div align="center">
 
