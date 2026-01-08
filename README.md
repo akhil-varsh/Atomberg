@@ -292,19 +292,6 @@ lib/
 
 
 
-## 🐛 Troubleshooting
-
-### Common Issues
-
-| Issue | Solution |
-|-------|----------|
-| 🔴 Local badge not showing | Ensure phone & fan on same WiFi |
-| 🔴 Devices not loading | Check API credentials |
-| 🔴 APK won't install | Enable "Install unknown apps" |
-| 🔴 Slow response | Check WiFi connection |
-| 🔴 Permission denied | Grant Local Network permission |
-
----
 
 ## 📊 Performance
 
